@@ -1,0 +1,91 @@
+{
+  "_instructions": "本文件是行业接入四件套之一。域 ID 一经分配不复用。填完跑平台侧校验器自测。",
+  "profile_version": "domain/1.0",
+  "domain_id": "chem",
+  "domain_name": "化工 · 危险化学品分类与 GHS",
+  "operator": {
+    "org": "待认领 — 本域开放给具备资质的运营方",
+    "contact": "见 README 的「认领方式」",
+    "agent_card": "https://SynomosAI.github.io/.well-known/agent-card.json"
+  },
+  "attributes": [
+    {
+      "key": "chem.hazmat_class",
+      "type": "enum",
+      "values": [
+        "explosive",
+        "flammable_gas",
+        "flammable_liquid",
+        "toxic",
+        "corrosive",
+        "oxidizer",
+        "radioactive",
+        "other",
+        "not_hazmat"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "chem.ghs_labeling",
+      "type": "enum",
+      "values": [
+        "compliant",
+        "incomplete",
+        "missing",
+        "not_applicable"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "chem.sds_available",
+      "type": "boolean",
+      "issuer_required": false,
+      "ttl_days": 365,
+      "assurance_min": "self-declared",
+      "visibility_default": "private"
+    },
+    {
+      "key": "chem.storage_compliance",
+      "type": "enum",
+      "values": [
+        "compliant",
+        "segregation_required",
+        "violation",
+        "unknown"
+      ],
+      "issuer_required": true,
+      "ttl_days": 180,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "chem.major_hazard_source",
+      "type": "enum",
+      "values": [
+        "yes",
+        "no",
+        "unidentified"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    }
+  ],
+  "checker_endpoint": "mcp://pending-claim/chem-checker",
+  "gate_map_ref": "./gate-map.json",
+  "privacy_ref": "./privacy.json",
+  "red_lines": [
+    "危险化学品分类以现行目录与鉴定结论为准，AI 不得自行判定物质是否属于危化品",
+    "不得输出「可安全储存/运输/使用」的放行类表述，安全条件须由具备资质机构评估",
+    "不得建议混储、超量储存或简化安全设施"
+  ],
+  "valid_from": "2026-09-12",
+  "status": "RESERVED"
+}
