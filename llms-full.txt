@@ -1,0 +1,50 @@
+# chem-hazmat-class-checker — 完整文本
+
+本文件为 llms.txt 标准的「完整版」，供长上下文模型一次性读取本仓的完整说明。
+
+## 这是什么
+
+`chem-hazmat-class-checker` 是 SynomosAI 平台的一个行业接入域声明仓（domain id `chem`，profile `domain/1.0`，当前状态 `RESERVED`，占位时间 2026-09-12）。它把「这个化学品属哪类危化品、标识和存储到不到位」拆成可核验的属性，让 AI 只做提示，不下安全结论。
+
+一句话：危险化学品分类 / GHS 标识 / 重大危险源的出处链核验，checker 只出示、不下安全放行结论。
+
+## 解决什么问题
+
+1. 危化品的分类、标识、储存、运输各有强制要求，重大危险源还需专门辨识。
+2. AI 容易越权替人下「是危化品 / 可安全储存」结论——本仓用红线 + gate-map 把这种输出挡掉。
+3. 分类必须以现行目录与鉴定结论为准，不能 AI 自定。
+
+## 属性（5 个）
+
+- `chem.hazmat_class`：explosive/flammable_gas/flammable_liquid/toxic/corrosive/oxidizer/radioactive/other/not_hazmat
+- `chem.ghs_labeling`：compliant/incomplete/missing/not_applicable
+- `chem.sds_available`（boolean）：是否有现行版 SDS
+- `chem.storage_compliance`：compliant/segregation_required/violation/unknown
+- `chem.major_hazard_source`：yes/no/unidentified
+
+## 红线（3 条，机器可读，gate-map 各有阻断规则）
+
+1. 危化品分类以现行目录与鉴定结论为准，AI 不得自行判定物质是否属于危化品。
+2. 不得输出「可安全储存/运输/使用」放行表述，安全条件须由资质机构评估。
+3. 不得建议混储、超量储存或简化安全设施。
+
+## 快速开始
+
+```bash
+git clone https://github.com/SynomosAI/chem-hazmat-class-checker.git
+cd chem-hazmat-class-checker
+python -m json.tool domain.manifest.json > /dev/null   # 校验 JSON 合法
+```
+
+## 触发词
+
+危险化学品分类 / GHS 标签 / SDS 安全技术说明书 / 重大危险源辨识 / 危化品目录归属 / 禁配隔离 / 这个能不能安全存（注：本域不下安全放行结论，只出示出处链）。
+
+## 许可与权利
+
+代码与配置按 MIT 许可使用（见根目录 LICENSE，© 2026 SynomosAI）。文档知识版权归 SynomosAI 所有。checker 输出仅出示与核验属性的出处链，不构成对主体资质或事项合规性的专业结论；结论权归本域鉴定机构、监管方与持有人本人。
+
+## 链接
+
+- 仓库: https://github.com/SynomosAI/chem-hazmat-class-checker
+- 四件套: domain.manifest.json / gate-map.json / privacy.json / checker.io.json
